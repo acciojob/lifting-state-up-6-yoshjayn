@@ -44,41 +44,27 @@
 import React from 'react';
 
 const TodoList = ({ todos, completeFunction }) => {
-  const handleClick = (id) => {
-    // Immediately disable the button to provide visual feedback
-    const button = document.querySelector(`button[data-id="${id}"]`);
-    if (button) button.disabled = true;
-    completeFunction(id);
-  };
-
   return (
     <div style={{ margin: '20px' }}>
       <h2 style={{ marginLeft: '20px' }}>Child Component</h2>
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {todos.map(task => (
-          <li key={task.id} style={{ margin: '10px 0' }}>
-            <span style={{
-              textDecoration: task.completed ? 'line-through' : 'none',
-              marginRight: '10px'
-            }}>
+        {todos.map((task, index) => (
+          <li 
+            key={task.id} 
+            style={{ margin: '10px 0' }}
+            data-testid={`todo-item-${index + 1}`} // Added for test targeting
+          >
+            <span>
               {task.text}
             </span>
-            {!task.completed && (
+            {!task.completed ? (
               <button 
-                data-id={task.id}  // Added for test targeting
-                data-testid={`complete-btn-${task.id}`}  // Standard test ID
-                onClick={() => handleClick(task.id)}
-                style={{
-                  backgroundColor: '#4CAF50',
-                  color: 'white',
-                  border: 'none',
-                  padding: '5px 10px',
-                  borderRadius: '3px'
-                }}
+                onClick={() => completeFunction(task.id)}
+                data-testid={`complete-btn-${index + 1}`} // Standard test ID
               >
                 Complete
               </button>
-            )}
+            ) : null}
           </li>
         ))}
       </ul>
